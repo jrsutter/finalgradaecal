@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Semester Grade Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .section {
+      margin-bottom: 30px;
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    .section h2 {
+      margin-top: 0;
+    }
+    .result, .needed-grades {
+      margin-top: 10px;
+    }
+    .highlight-red {
+      color: red;
+      font-weight: bold;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type=number] {
+      width: 60px;
+    }
+  </style>
+</head>
+<body>
+  <div class="section">
+    <h2>First Semester</h2>
+    <label>1st 9 Weeks Grade: <input type="number" id="q1"></label>
+    <label>2nd 9 Weeks Grade: <input type="number" id="q2"></label>
+    <label>Midterm Grade: <input type="number" id="midterm"></label>
+    <button onclick="calculateSemester('first')">Calculate First Semester</button>
+    <div class="result" id="first-result"></div>
+    <div class="needed-grades" id="first-needed"></div>
+  </div>
+
+  <div class="section">
+    <h2>Second Semester</h2>
+    <label>3rd 9 Weeks Grade: <input type="number" id="q3"></label>
+    <label>4th 9 Weeks Grade: <input type="number" id="q4"></label>
+    <label>Final Exam Grade: <input type="number" id="final"></label>
+    <button onclick="calculateSemester('second')">Calculate Second Semester</button>
+    <div class="result" id="second-result"></div>
+    <div class="needed-grades" id="second-needed"></div>
+  </div>
+
+  <div class="section">
+    <h2>Year Average</h2>
+    <div class="result" id="year-average"></div>
+  </div>
+
+  <script>
+    function calculateSemester(sem) {
+      let q1, q2, exam, resultDiv, neededDiv;
+
+      if (sem === 'first') {
+        q1 = parseFloat(document.getElementById('q1').value);
+        q2 = parseFloat(document.getElementById('q2').value);
+        exam = parseFloat(document.getElementById('midterm').value);
+        resultDiv = document.getElementById('first-result');
+        neededDiv = document.getElementById('first-needed');
+      } else {
+        q1 = parseFloat(document.getElementById('q3').value);
+        q2 = parseFloat(document.getElementById('q4').value);
+        exam = parseFloat(document.getElementById('final').value);
+        resultDiv = document.getElementById('second-result');
+        neededDiv = document.getElementById('second-needed');
+      }
+
+      if (isNaN(q1) || isNaN(q2)) {
+        resultDiv.innerHTML = "Please enter valid 9 weeks grades.";
+        return;
+      }
+
+      let nineWeeksAvg = (q1 + q2) / 2;
+      let semesterGrade = exam ? (nineWeeksAvg * 0.85 + exam * 0.15) : nineWeeksAvg;
+
+      resultDiv.innerHTML = `Semester Grade: <strong>${semesterGrade.toFixed(2)}</strong>`;
+
+      // Show required exam scores for 70, 80, 90
+      let neededHtml = "<p>Needed Exam Scores:</p><ul>";
+      [70, 80, 90].forEach(target => {
+        let neededExam = (target - nineWeeksAvg * 0.85) / 0.15;
+        neededHtml += `<li>To get a ${target}: <strong>${neededExam.toFixed(2)}</strong></li>`;
+      });
+      neededHtml += "</ul>";
+      neededDiv.innerHTML = neededHtml;
+
+      // Update year average if both semesters are calculated
+      updateYearAverage();
+    }
+
+    function updateYearAverage() {
+      const first = document.getElementById('first-result').textContent.match(/\d+\.\d+/);
+      const second = document.getElementById('second-result').textContent.match(/\d+\.\d+/);
+
+      if (first && second) {
+        const avg1 = parseFloat(first[0]);
+        const avg2 = parseFloat(second[0]);
+        const yearAvg = (avg1 + avg2) / 2;
+
+        let highlight = (avg2 < 70 || yearAvg < 70) ? 'highlight-red' : '';
+        document.getElementById('year-average').innerHTML = `Year Average: <strong class="${highlight}">${yearAvg.toFixed(2)}</strong>`;
+      }
+    }
+  </script>
+</body>
+</html>
