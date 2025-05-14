@@ -111,7 +111,7 @@
 
       // Show required exam scores for 70, 80, 90
       let neededHtml = "<p>Needed Exam Scores:</p><ul>";
-      [70, 80, 90].forEach(target => {
+      [69.5, 79.5, 89.5].forEach(target => {
         let neededExam = (target - nineWeeksAvg * classWeight) / examWeight;
         neededHtml += `<li>To get a ${target}: <strong>${neededExam.toFixed(2)}</strong></li>`;
       });
