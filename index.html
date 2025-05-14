@@ -110,7 +110,7 @@
       let gradeStr = `Semester Grade: <strong>${semesterGrade.toFixed(2)}</strong>`;
       if (sem === 'second' && semesterGrade < 69.5) {
         gradeStr = `Semester Grade: <strong class="highlight-red">${semesterGrade.toFixed(2)}</strong>`;
-        setTimeout(() => alert("You must pass the second semester in order to receive credit for Algebra 1"), 100);
+       // setTimeout(() => alert("You must pass the second semester in order to receive credit for Algebra 1"), 100);
       }
       resultDiv.innerHTML = gradeStr;
 
