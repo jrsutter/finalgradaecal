@@ -83,7 +83,9 @@
       }
 
       let nineWeeksAvg = (q1 + q2) / 2;
-      let semesterGrade = exam ? (nineWeeksAvg * 0.85 + exam * 0.15) : nineWeeksAvg;
+      let semesterGrade = (!isNaN(exam)) 
+        ? (nineWeeksAvg * 0.85 + exam * 0.15)
+        : nineWeeksAvg;
 
       resultDiv.innerHTML = `Semester Grade: <strong>${semesterGrade.toFixed(2)}</strong>`;
 
