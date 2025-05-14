@@ -107,7 +107,12 @@
         ? (nineWeeksAvg * classWeight + exam * examWeight)
         : nineWeeksAvg;
 
-      resultDiv.innerHTML = `Semester Grade: <strong>${semesterGrade.toFixed(2)}</strong>`;
+      let gradeStr = `Semester Grade: <strong>${semesterGrade.toFixed(2)}</strong>`;
+      if (sem === 'second' && semesterGrade < 69.5) {
+        gradeStr = `Semester Grade: <strong class="highlight-red">${semesterGrade.toFixed(2)}</strong>`;
+        alert("You must pass the second semester in order to receive credit for Algebra 1");
+      }
+      resultDiv.innerHTML = gradeStr;
 
       // Show required exam scores for 70, 80, 90
       let neededHtml = "<p>Needed Exam Scores:</p><ul>";
