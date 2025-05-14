@@ -8,6 +8,9 @@
       font-family: Arial, sans-serif;
       padding: 20px;
     }
+    .top-controls {
+      margin-bottom: 20px;
+    }
     .container {
       display: flex;
       gap: 20px;
@@ -38,6 +41,15 @@
   </style>
 </head>
 <body>
+  <div class="top-controls">
+    <label>Exam Percentage:
+      <select id="exam-weight">
+        <option value="0.15" selected>15%</option>
+        <option value="0.10">10%</option>
+      </select>
+    </label>
+  </div>
+
   <div class="container">
     <div class="section">
       <h2>First Semester</h2>
@@ -68,6 +80,8 @@
   <script>
     function calculateSemester(sem) {
       let q1, q2, exam, resultDiv, neededDiv;
+      const examWeight = parseFloat(document.getElementById('exam-weight').value);
+      const classWeight = 1 - examWeight;
 
       if (sem === 'first') {
         q1 = parseFloat(document.getElementById('q1').value);
@@ -90,7 +104,7 @@
 
       let nineWeeksAvg = (q1 + q2) / 2;
       let semesterGrade = (!isNaN(exam)) 
-        ? (nineWeeksAvg * 0.85 + exam * 0.15)
+        ? (nineWeeksAvg * classWeight + exam * examWeight)
         : nineWeeksAvg;
 
       resultDiv.innerHTML = `Semester Grade: <strong>${semesterGrade.toFixed(2)}</strong>`;
@@ -98,13 +112,12 @@
       // Show required exam scores for 70, 80, 90
       let neededHtml = "<p>Needed Exam Scores:</p><ul>";
       [70, 80, 90].forEach(target => {
-        let neededExam = (target - nineWeeksAvg * 0.85) / 0.15;
+        let neededExam = (target - nineWeeksAvg * classWeight) / examWeight;
         neededHtml += `<li>To get a ${target}: <strong>${neededExam.toFixed(2)}</strong></li>`;
       });
       neededHtml += "</ul>";
       neededDiv.innerHTML = neededHtml;
 
-      // Update year average if both semesters are calculated
       updateYearAverage();
     }
 
